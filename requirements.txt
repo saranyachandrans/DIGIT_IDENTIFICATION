@@ -1,0 +1,7 @@
+datasets
+numpy
+pyyaml
+tensorflow
+matplotlib
+pillow
+flask

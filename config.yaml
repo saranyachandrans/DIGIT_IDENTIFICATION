@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------
+# EMNIST Letters - pipeline configuration
+# All paths are relative to the project root (where config.yaml lives)
+# ---------------------------------------------------------------
+
+project:
+  seed: 42
+  log_level: INFO
+
+data_ingestion:
+  dataset_name: tanganke/emnist_letters   # Hugging Face dataset id
+  artifacts_dir: artifacts/data_ingestion
+  processed_file: artifacts/data_ingestion/emnist_letters.npz
+  metadata_file: artifacts/data_ingestion/metadata.json
+  image_size: 28
+  num_classes: 26
+  batch_size: 2000            # rows converted per chunk (memory control)
+  fix_orientation: false      # set true if samples look transposed/mirrored
+  skip_if_exists: true        # reuse the .npz unless --force is passed
+
+training:
+  artifacts_dir: artifacts/model_training
+  model_path: artifacts/model_training/emnist_cnn_model.keras
+  history_file: artifacts/model_training/history.json
+  metrics_file: artifacts/model_training/metrics.json
+  plot_file: artifacts/model_training/accuracy_curve.png
+  epochs: 10
+  batch_size: 128
+  validation_split: 0.1       # taken from a shuffled copy of the train set
+  learning_rate: 0.001
+  early_stopping:
+    enabled: true
+    patience: 3
+    monitor: val_accuracy
+  model:
+    conv_filters: [32, 64]
+    kernel_size: 3
+    pool_size: 2
+    dense_units: 128
+    dropout: 0.3
+
+app:
+  host: 127.0.0.1
+  port: 5000
+  debug: true
+  max_upload_mb: 5
+  allowed_extensions: [png, jpg, jpeg, bmp, webp]
+  auto_invert: true        # EMNIST = light letter on dark background; flips dark-on-light uploads
+  crop_to_letter: true     # crop to the letter and centre it with padding, like EMNIST
+  transpose_input: false   # set true if your training images looked transposed/mirrored
+  top_k: 3                 # number of predictions to display

@@ -1,0 +1,15 @@
+{
+  "dataset": "tanganke/emnist_letters",
+  "train_samples": 124800,
+  "test_samples": 20800,
+  "image_shape": [
+    28,
+    28
+  ],
+  "num_classes": 26,
+  "label_range": [
+    0,
+    25
+  ],
+  "fix_orientation": false
+}
